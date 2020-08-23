@@ -33,6 +33,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -48,38 +52,43 @@ dependencies {
 
     //DI
     implementation "com.google.dagger:hilt-android:$rootProject.ext.hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$rootProject.ext.hilt_lifecycle_version"
     kapt "com.google.dagger:hilt-android-compiler:$rootProject.ext.hilt_version"
+    kapt "androidx.hilt:hilt-compiler:$rootProject.ext.hilt_lifecycle_version"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.ext.nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.ext.nav_version"
 
     // Testing Navigation
-    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    androidTestImplementation "androidx.navigation:navigation-testing:$rootProject.ext.nav_version"
 
     //Room
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
+    implementation "androidx.room:room-ktx:$rootProject.ext.room_version"
+    implementation "androidx.room:room-rxjava2:$rootProject.ext.room_version"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.ext.room_version"
 
-    testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation "androidx.room:room-testing:$rootProject.ext.room_version"
 
     // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.ext.lifecycle_version"
 
     // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.ext.lifecycle_version"
 
     // Lifecycles
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.ext.lifecycle_version"
 
     // Saved state module for ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$rootProject.ext.lifecycle_version"
 
     // Annotation processor
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.ext.lifecycle_version"
 
-    testImplementation "androidx.arch.core:core-testing:$arch_version"
+    testImplementation "androidx.arch.core:core-testing:$rootProject.ext.arch_version"
+
+    //retrofit
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit_version"
 
 }

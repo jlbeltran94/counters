@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.countersapp.ui.welcome.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_countersFragment"
+            app:destination="@id/countersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/countersFragment"
+        android:name="com.example.countersapp.ui.counters.CountersFragment"
+        android:label="fragment_counters"
+        tools:layout="@layout/fragment_counters" >
+        <action
+            android:id="@+id/action_countersFragment_to_editCounterFragment"
+            app:destination="@id/editCounterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editCounterFragment"
+        android:name="com.example.countersapp.ui.editcounters.EditCounterFragment"
+        android:label="fragment_edit_counter"
+        tools:layout="@layout/fragment_edit_counter" />
+</navigation>
