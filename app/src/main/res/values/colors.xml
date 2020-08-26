@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FF9500</color>
-    <color name="colorPrimaryDark">#FF9500</color>
-    <color name="colorAccent">#FF9500</color>
-    <color name="background">#E5E5E5</color>
+    <color name="colorPrimaryDark">#C17A22</color>
+    <color name="colorSecondary">#FF9500</color>
+    <color name="colorTextLight">#A0A0A0</color>
+    <color name="colorWarn">#E56655</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="onBack">#303030</color>
+    <color name="colorDivider">#CCCCCC</color>
+    <color name="colorDisabled">#C0C0C0</color>
+    <color name="colorBackground">#F3F3F3</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnSurface">#505050</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="black_overlay">#66000000</color>
+
 </resources>

@@ -5,40 +5,30 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.countersapp.R
+import androidx.fragment.app.viewModels
+import com.example.countersapp.databinding.FragmentWelcomeBinding
+import com.example.countersapp.ui.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
-
-/**
- * A simple [Fragment] subclass.
- * Use the [WelcomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class WelcomeFragment : Fragment() {
 
-
-
+    lateinit var binding: FragmentWelcomeBinding
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_welcome, container, false)
+        binding = FragmentWelcomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WelcomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance() =
-            WelcomeFragment()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.button.setOnClickListener {
+            mainViewModel.setNotFirstTime()
+            mainViewModel.navToCounters()
+        }
     }
 }

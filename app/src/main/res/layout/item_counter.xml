@@ -7,7 +7,7 @@
     android:minHeight="67dp">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/counterTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -16,6 +16,7 @@
         android:layout_marginBottom="24dp"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
         app:layout_constraintHorizontal_bias="0.5"
@@ -31,18 +32,17 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/textView6">
+        app:layout_constraintStart_toEndOf="@+id/counterTitle"
+        app:layout_constraintTop_toTopOf="@+id/counterTitle">
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_minus"
-            app:tint="@color/colorPrimary" />
+            android:id="@+id/decBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_minus" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/counterCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -51,10 +51,12 @@
             tools:text="5" />
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_add"
-            app:tint="@color/colorPrimary" />
+            android:id="@+id/incBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_add" />
+
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

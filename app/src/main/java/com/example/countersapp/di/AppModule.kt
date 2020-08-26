@@ -1,26 +1,42 @@
 package com.example.countersapp.di
 
-import android.app.Activity
-import com.example.countersapp.ui.NavActivity
-import com.example.countersapp.ui.Navigator
-import com.example.countersapp.ui.NavigatorImp
-import dagger.Binds
+import android.content.Context
+import android.content.SharedPreferences
+import com.example.countersapp.data.api.CountersService
+import com.example.countersapp.data.api.Endpoints.URL_BASE
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityComponent::class)
-abstract class AppModule {
+@InstallIn(ApplicationComponent::class)
+object AppModule {
 
-    @Binds
-    abstract fun binNavigator(navigatorImp: NavigatorImp): Navigator
-    companion object {
-
-        @Provides
-        fun provideNavActivity(activity: Activity): NavActivity? {
-            return activity as? NavActivity
-        }
+    @Singleton
+    @Provides
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .baseUrl(URL_BASE)
+            .build()
     }
+
+    @Singleton
+    @Provides
+    fun provideCountersService(retrofit: Retrofit): CountersService {
+        return retrofit.create(CountersService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providePreference(@ApplicationContext context: Context): SharedPreferences =
+        context.getSharedPreferences("counters", 0)
 }

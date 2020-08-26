@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -7,6 +8,7 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorError">@color/colorWarn</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="colorAccent">@color/colorPrimary</item>
 
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
@@ -16,5 +18,4 @@
         <item name="colorOnBackground">@color/colorBackground</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
     </style>
-
 </resources>

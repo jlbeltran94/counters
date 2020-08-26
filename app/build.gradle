@@ -50,6 +50,8 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$rootProject.ext.androidx_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.ext.espresso_core_version"
 
+    implementation "com.google.android.material:material:$rootProject.ext.material_version"
+
     //DI
     implementation "com.google.dagger:hilt-android:$rootProject.ext.hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$rootProject.ext.hilt_lifecycle_version"
@@ -62,14 +64,6 @@ dependencies {
 
     // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$rootProject.ext.nav_version"
-
-    //Room
-    implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
-    implementation "androidx.room:room-ktx:$rootProject.ext.room_version"
-    implementation "androidx.room:room-rxjava2:$rootProject.ext.room_version"
-    annotationProcessor "androidx.room:room-compiler:$rootProject.ext.room_version"
-
-    testImplementation "androidx.room:room-testing:$rootProject.ext.room_version"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.ext.lifecycle_version"
@@ -90,5 +84,14 @@ dependencies {
 
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava3:$rootProject.ext.retrofit_version"
+    implementation "com.google.code.gson:gson:$rootProject.ext.gson_version"
+
+    //RX
+    implementation "io.reactivex.rxjava3:rxandroid:$rootProject.ext.rx_version"
+    implementation "io.reactivex.rxjava3:rxjava:$rootProject.ext.rx_version"
+    implementation "io.reactivex.rxjava3:rxkotlin:$rootProject.ext.rx_version"
+
 
 }

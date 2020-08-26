@@ -7,39 +7,40 @@
     android:minHeight="67dp">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/counterTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
+        android:textSize="17sp"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:layout_constraintEnd_toStartOf="@+id/selectedIcon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Number of times I’ve forgotten my mother’s name because I was high on Frugelés." />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/selectedIcon"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/counterTitle"
         app:srcCompat="@drawable/ic_selected"
-        app:tint="@color/colorPrimaryDark" />
+        app:tint="@color/colorPrimary" />
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/selectedBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/drawable_selected_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +52,7 @@
         android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="imageView4,view" />
+        app:constraint_referenced_ids="selectedIcon,selectedBackground" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
