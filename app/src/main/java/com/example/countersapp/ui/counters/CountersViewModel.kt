@@ -16,6 +16,7 @@ class CountersViewModel @ViewModelInject constructor(
     private val navigator: Navigator
 ) : ViewModel(), LifecycleObserver {
 
+    private var query = ""
     private val composite = CompositeDisposable()
     private val _countersStateLiveData: MutableLiveData<CountersFragmentState> = MutableLiveData()
     val countersStateLiveData: LiveData<CountersFragmentState> = _countersStateLiveData
@@ -24,10 +25,13 @@ class CountersViewModel @ViewModelInject constructor(
     fun getCounters() {
         _countersStateLiveData.value = CountersFragmentState.Loading
         composite += countersInteractor.getCounters()
+            .doOnSuccess { cachedCounters = it }
+            .flatMapObservable { it.toObservable() }
+            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .toList()
             .applySchedulers()
             .subscribeBy(
                 onSuccess = {
-                    cachedCounters = it
                     _countersStateLiveData.value = CountersFragmentState.Success(it)
                 }, onError = {
                     _countersStateLiveData.value = CountersFragmentState.Error(it)
@@ -36,21 +40,30 @@ class CountersViewModel @ViewModelInject constructor(
     }
 
     fun searchCounter(query: String) {
+        this.query = query
         composite += cachedCounters.toObservable()
             .filter { query.isEmpty() || it.title.startsWith(query) }
             .toList()
             .applySchedulers()
             .subscribeBy(
                 onSuccess = {
-                    _countersStateLiveData.value = CountersFragmentState.Search(it)
+                    if (it.isNotEmpty()) {
+                        _countersStateLiveData.value = CountersFragmentState.Success(it)
+                    } else {
+                        _countersStateLiveData.value = CountersFragmentState.NoSearchResults
+                    }
                 }, onError = {
-                    _countersStateLiveData.value = CountersFragmentState.Error(it)
+                    _countersStateLiveData.value = CountersFragmentState.NoSearchResults
                 }
             )
     }
 
     fun incCounter(counter: Counter) {
         composite += countersInteractor.increaseCounter(counter.id)
+            .doOnSuccess { cachedCounters = it }
+            .flatMapObservable { it.toObservable() }
+            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .toList()
             .applySchedulers()
             .subscribeBy(
                 onSuccess = {
@@ -64,6 +77,10 @@ class CountersViewModel @ViewModelInject constructor(
 
     fun decCounter(counter: Counter) {
         composite += countersInteractor.decreaseCounter(counter.id)
+            .doOnSuccess { cachedCounters = it }
+            .flatMapObservable { it.toObservable() }
+            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .toList()
             .applySchedulers()
             .subscribeBy(
                 onSuccess = {
@@ -79,6 +96,10 @@ class CountersViewModel @ViewModelInject constructor(
         composite += counters.toObservable()
             .flatMapSingle { countersInteractor.deleteCounter(it.id) }
             .lastOrError()
+            .doOnSuccess { cachedCounters = it }
+            .flatMapObservable { it.toObservable() }
+            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .toList()
             .applySchedulers()
             .subscribeBy(
                 onSuccess = {
@@ -88,6 +109,10 @@ class CountersViewModel @ViewModelInject constructor(
                         CountersFragmentState.DeleteError(it)
                 }
             )
+    }
+
+    fun clearQuery() {
+        query = ""
     }
 
     fun navigateToCreateCounter() {

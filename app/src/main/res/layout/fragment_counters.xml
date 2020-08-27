@@ -40,7 +40,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <include
-        android:id="@+id/errorEstate"
+        android:id="@+id/errorState"
         layout="@layout/layout_counters_error"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -51,7 +51,18 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <include
-        android:id="@+id/successEstate"
+        android:id="@+id/noSearchResultsState"
+        layout="@layout/layout_counters_no_search_results_state"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <include
+        android:id="@+id/successState"
         layout="@layout/layout_counters_has_data_state"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -62,7 +73,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <include
-        android:id="@+id/loadingEstate"
+        android:id="@+id/loadingState"
         layout="@layout/layout_counters_loading_state"
         android:layout_width="0dp"
         android:layout_height="0dp"

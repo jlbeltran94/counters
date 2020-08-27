@@ -29,9 +29,10 @@ class CountersFragment : Fragment(), ItemActionsListener {
     private val countersViewModel by viewModels<CountersViewModel>()
     private val viewStates: List<ViewBinding>
         get() = listOf(
-            binding.errorEstate,
-            binding.successEstate,
-            binding.loadingEstate
+            binding.errorState,
+            binding.successState,
+            binding.loadingState,
+            binding.noSearchResultsState
         )
 
     private val countersAdapter by lazy { CountersAdapter() }
@@ -66,11 +67,17 @@ class CountersFragment : Fragment(), ItemActionsListener {
     private fun initListeners() {
         binding.createCounterButton.setOnClickListener {
             countersViewModel.navigateToCreateCounter()
+            clearSearch()
         }
+    }
+    private fun clearSearch(){
+        countersViewModel.clearQuery()
+        binding.toolbar.searchBarView.setQuery("", false)
+        binding.toolbar.searchBarView.clearFocus()
     }
 
     private fun setupErrorState() {
-        binding.errorEstate.retryButton.setOnClickListener {
+        binding.errorState.retryButton.setOnClickListener {
             countersViewModel.getCounters()
         }
     }
@@ -78,7 +85,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
     private fun setupCountersAdapter() {
         countersAdapter.isSelectionEnabled = false
         countersAdapter.listener = this
-        binding.successEstate.countersRecycler.adapter = countersAdapter
+        binding.successState.countersRecycler.adapter = countersAdapter
     }
 
     private fun setupSearchView() {
@@ -139,10 +146,10 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     private fun handleState(state: CountersFragmentState) {
-        binding.successEstate.swipeToRefreshCounters.isRefreshing = false
+        binding.successState.swipeToRefreshCounters.isRefreshing = false
         when (state) {
             is CountersFragmentState.Loading -> {
-                setViewStatesVisibility(binding.loadingEstate)
+                setViewStatesVisibility(binding.loadingState)
             }
             is CountersFragmentState.Success -> {
                 handleSuccessState(state)
@@ -151,15 +158,15 @@ class CountersFragment : Fragment(), ItemActionsListener {
                 createErrorActionDialog(state)
                 Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
-            is CountersFragmentState.Search -> {
-                handleSuccessState(CountersFragmentState.Success(state.data))
+            is CountersFragmentState.NoSearchResults -> {
+                setViewStatesVisibility(binding.noSearchResultsState)
             }
             is CountersFragmentState.DeleteError -> {
                 showErrorDeletingDialog()
                 Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
             is CountersFragmentState.Error -> {
-                setViewStatesVisibility(binding.errorEstate)
+                setViewStatesVisibility(binding.errorState)
                 Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
         }
@@ -167,16 +174,16 @@ class CountersFragment : Fragment(), ItemActionsListener {
 
     private fun handleSuccessState(countersFragmentState: CountersFragmentState.Success) {
         val data = countersFragmentState.data
-        setViewStatesVisibility(binding.successEstate)
+        setViewStatesVisibility(binding.successState)
         val times = data.fold(0) { count, counter ->
             count + counter.count
         }
-        binding.successEstate.numberOfCounters.text =
+        binding.successState.numberOfCounters.text =
             if (data.isNotEmpty()) "${data.size} items" else ""
-        binding.successEstate.totalTimes.text = if (data.isNotEmpty()) "$times times" else ""
-        binding.successEstate.noDataGroup.visible(data.isEmpty())
-        binding.successEstate.hasDataGroup.visible(data.isNotEmpty())
-        binding.successEstate.swipeToRefreshCounters.setOnRefreshListener {
+        binding.successState.totalTimes.text = if (data.isNotEmpty()) "$times times" else ""
+        binding.successState.noDataGroup.visible(data.isEmpty())
+        binding.successState.hasDataGroup.visible(data.isNotEmpty())
+        binding.successState.swipeToRefreshCounters.setOnRefreshListener {
             countersViewModel.getCounters()
         }
         countersAdapter.counters = data
