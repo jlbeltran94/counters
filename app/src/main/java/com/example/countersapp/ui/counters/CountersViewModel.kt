@@ -75,6 +75,21 @@ class CountersViewModel @ViewModelInject constructor(
             )
     }
 
+    fun deleteCounters(counters: List<Counter>) {
+        composite += counters.toObservable()
+            .flatMapSingle { countersInteractor.deleteCounter(it.id) }
+            .lastOrError()
+            .applySchedulers()
+            .subscribeBy(
+                onSuccess = {
+                    _countersStateLiveData.value = CountersFragmentState.Success(it)
+                }, onError = {
+                    _countersStateLiveData.value =
+                        CountersFragmentState.DeleteError(it)
+                }
+            )
+    }
+
     fun navigateToCreateCounter() {
         navigator.navigateToCreateCounter()
     }

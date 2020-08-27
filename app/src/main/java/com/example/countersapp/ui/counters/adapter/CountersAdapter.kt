@@ -19,13 +19,28 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 notifyDataSetChanged()
             }
         }
+
     var counters: List<Counter> = listOf()
         set(value) {
             field = value
+            val ssc = HashMap(selectedCounters)
+            selectedCounters.apply {
+                clear()
+                value.forEach {
+                    this[it] = ssc[it] ?: false
+                }
+            }
+            val selectedCount = getSelectedItemsCount()
+            if (selectedCount > 0) {
+                listener?.onSelectionChanges(selectedCount)
+            } else {
+                isSelectionEnabled = false
+            }
             notifyDataSetChanged()
         }
+
     var listener: ItemActionsListener? = null
-    var selectedCounters = hashMapOf<Counter, Boolean>()
+    private var selectedCounters = hashMapOf<Counter, Boolean>()
 
     override fun getItemViewType(position: Int): Int {
         return if (isSelectionEnabled) R.layout.item_counter_selectable else R.layout.item_counter
@@ -92,7 +107,7 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val newState = currentState.not()
             selectedCounters[counter] = newState
             isSelectionEnabled = true
-            notifyDataSetChanged()
+            listener?.onSelectionChanges(getSelectedItemsCount())
         }
     }
 

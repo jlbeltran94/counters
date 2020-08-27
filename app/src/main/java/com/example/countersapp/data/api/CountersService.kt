@@ -10,8 +10,8 @@ import com.example.countersapp.data.api.models.CreateCounterRequestModel
 import com.example.countersapp.data.api.models.ModifyCounterRequestModel
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 
 interface CountersService {
@@ -24,7 +24,7 @@ interface CountersService {
         @Body createCounterRequestModel: CreateCounterRequestModel
     ): Single<List<CounterResponseModel>>
 
-    @DELETE(DELETE_COUNTER)
+    @HTTP(method = "DELETE", path = DELETE_COUNTER, hasBody = true)
     fun deleteCounter(
         @Body modifyCounterRequestModel: ModifyCounterRequestModel
     ): Single<List<CounterResponseModel>>

@@ -1,13 +1,11 @@
 package com.example.countersapp.ui.counters
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
@@ -15,11 +13,11 @@ import com.example.countersapp.databinding.FragmentCountersBinding
 import com.example.countersapp.ui.counters.adapter.CountersAdapter
 import com.example.countersapp.ui.counters.adapter.ItemActionsListener
 import com.example.countersapp.ui.models.Counter
-import com.example.countersapp.util.invisible
+import com.example.countersapp.util.ButtonAction
+import com.example.countersapp.util.SimpleDialogFactory
 import com.example.countersapp.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_counters.view.*
-import kotlinx.android.synthetic.main.fragment_create_counter.view.*
 import kotlinx.android.synthetic.main.fragment_create_counter.view.icClose
 import kotlinx.android.synthetic.main.toolbar_selecting_counters.view.*
 
@@ -49,9 +47,10 @@ class CountersFragment : Fragment(), ItemActionsListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         lifecycle.addObserver(countersViewModel)
+        countersAdapter.isSelectionEnabled = false
         countersAdapter.listener = this
         binding.successEstate.countersRecycler.adapter = countersAdapter
-        binding.errorEstate.button2.setOnClickListener {
+        binding.errorEstate.retryButton.setOnClickListener {
             countersViewModel.getCounters()
         }
         countersViewModel.countersStateLiveData.observe(viewLifecycleOwner) {
@@ -92,31 +91,47 @@ class CountersFragment : Fragment(), ItemActionsListener {
             startActivity(shareIntent)
         }
 
-        binding.toolbar.toolbarSelectingCounters.deleteCountersBtn.setOnClickListener{
-
+        binding.toolbar.toolbarSelectingCounters.deleteCountersBtn.setOnClickListener {
+            val countersToDelete = countersAdapter.getSelectedCounters()
+            val countersToDeleteTitle = countersToDelete.joinToString {
+                "\"${it.title}\""
+            }
+            val deleteAction: ButtonAction = { _, _ ->
+                countersViewModel.deleteCounters(countersToDelete)
+            }
+            SimpleDialogFactory.createDialog(
+                requireContext(),
+                message = "Delete $countersToDeleteTitle?",
+                positiveButton = "Delete" to deleteAction,
+                negativeButton = "Cancel" to SimpleDialogFactory.noAction
+            ).show()
         }
     }
 
-    private fun handleState(countersFragmentState: CountersFragmentState) {
+    private fun handleState(state: CountersFragmentState) {
         binding.successEstate.swipeToRefreshCounters.isRefreshing = false
-        when (countersFragmentState) {
+        when (state) {
             is CountersFragmentState.Loading -> {
                 setViewStatesVisibility(binding.loadingEstate)
             }
             is CountersFragmentState.Success -> {
-                handleSuccessState(countersFragmentState)
+                handleSuccessState(state)
             }
             is CountersFragmentState.ErrorAction -> {
-                createErrorActionDialog(countersFragmentState)
-                Log.e("COUNTERS_FRAGMENT", countersFragmentState.throwable.message)
+                createErrorActionDialog(state)
+                Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
             is CountersFragmentState.Search -> {
-                handleSuccessState(CountersFragmentState.Success(countersFragmentState.data))
+                handleSuccessState(CountersFragmentState.Success(state.data))
+            }
+            is CountersFragmentState.DeleteError -> {
+                showErrorDeletingDialog()
+                Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
 
             is CountersFragmentState.Error -> {
                 setViewStatesVisibility(binding.errorEstate)
-                Log.e("COUNTERS_FRAGMENT", countersFragmentState.throwable.message)
+                Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
         }
     }
@@ -150,18 +165,27 @@ class CountersFragment : Fragment(), ItemActionsListener {
             CountersAction.INCREASE -> counter.count + 1
             CountersAction.DECREASE -> counter.count - 1
         }
-        AlertDialog.Builder(requireContext()).create().apply {
-            setTitle("Couldn't update the \"${counter.title}\" to $expectedQty ")
-            setMessage("The internet connection appears to be offline")
-            setButton(AlertDialog.BUTTON_NEGATIVE, "Retry") { _, _ ->
-                when (errorAction.action) {
-                    CountersAction.INCREASE -> countersViewModel.incCounter(counter)
-                    CountersAction.DECREASE -> countersViewModel.decCounter(counter)
-                }
+        val retryAction: ButtonAction = { _, _ ->
+            when (errorAction.action) {
+                CountersAction.INCREASE -> countersViewModel.incCounter(counter)
+                CountersAction.DECREASE -> countersViewModel.decCounter(counter)
             }
-            setButton(AlertDialog.BUTTON_POSITIVE, "Dismiss") { _, _ -> }
-            show()
         }
+        SimpleDialogFactory.createDialog(
+            requireContext(),
+            title = "Couldn't update the \"${counter.title}\" to $expectedQty",
+            message = "The internet connection appears to be offline",
+            positiveButton = "Dismiss" to SimpleDialogFactory.noAction,
+            negativeButton = "Retry" to retryAction
+        ).show()
+    }
+
+    private fun showErrorDeletingDialog() {
+        SimpleDialogFactory.createDialog(
+            requireContext(),
+            message = "Couldn't delete the counter",
+            positiveButton = "Ok" to SimpleDialogFactory.noAction
+        ).show()
     }
 
     override fun onIncCounterAction(counter: Counter) {
