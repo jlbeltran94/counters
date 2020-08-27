@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.countersapp.databinding.FragmentCreateCounterBinding
+import com.example.countersapp.util.SimpleDialogFactory
 import com.example.countersapp.util.invisible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -63,9 +64,19 @@ class CreateCounterFragment : Fragment() {
             }
             is CreateCounterFragmentState.Error -> {
                 setSavingVisibility(btnInvisible = false, progressBarInvisible = true)
+                showErrorDialog()
                 Log.e("COUNTERS_FRAGMENT", createCounterFragmentState.throwable.message)
             }
         }
+    }
+
+    private fun showErrorDialog() {
+        SimpleDialogFactory.createDialog(
+            requireContext(),
+            title = "Couldn't crate the counter",
+            message = "The internet connection appears to be offline",
+            positiveButton = "Ok" to SimpleDialogFactory.noAction
+        ).show()
     }
 
     private fun setSavingVisibility(btnInvisible: Boolean, progressBarInvisible: Boolean) {
