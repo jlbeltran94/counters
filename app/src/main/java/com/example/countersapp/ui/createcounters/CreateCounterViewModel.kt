@@ -3,7 +3,7 @@ package com.example.countersapp.ui.createcounters
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.countersapp.domain.CountersInteractor
-import com.example.countersapp.ui.navigation.Navigator
+import com.example.countersapp.ui.navigation.NavigationDispatcher
 import com.example.countersapp.util.applySchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 
 class CreateCounterViewModel @ViewModelInject constructor(
     private val countersInteractor: CountersInteractor,
-    private val navigator: Navigator
+    private val navigator: NavigationDispatcher
 ) : ViewModel() {
 
     private val composite = CompositeDisposable()
@@ -33,7 +33,7 @@ class CreateCounterViewModel @ViewModelInject constructor(
     }
 
     fun navigateBack() {
-        navigator.navigateUp()
+        navigator.emit { it.navigateUp() }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)

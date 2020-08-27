@@ -26,9 +26,8 @@ class WelcomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.button.setOnClickListener {
-            mainViewModel.setNotFirstTime()
-            mainViewModel.navToCounters()
+        binding.getStartedBtn.setOnClickListener {
+            mainViewModel.onGetStarted()
         }
     }
 }

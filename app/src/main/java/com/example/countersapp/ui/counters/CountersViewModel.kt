@@ -2,9 +2,10 @@ package com.example.countersapp.ui.counters
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.example.countersapp.R
 import com.example.countersapp.domain.CountersInteractor
 import com.example.countersapp.ui.models.Counter
-import com.example.countersapp.ui.navigation.Navigator
+import com.example.countersapp.ui.navigation.NavigationDispatcher
 import com.example.countersapp.util.applySchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -13,8 +14,8 @@ import io.reactivex.rxjava3.kotlin.toObservable
 
 class CountersViewModel @ViewModelInject constructor(
     private val countersInteractor: CountersInteractor,
-    private val navigator: Navigator
-) : ViewModel(), LifecycleObserver {
+    private val navigator: NavigationDispatcher
+) : ViewModel() {
 
     private var query = ""
     private val composite = CompositeDisposable()
@@ -121,17 +122,12 @@ class CountersViewModel @ViewModelInject constructor(
     }
 
     fun navigateToCreateCounter() {
-        navigator.navigateToCreateCounter()
+        navigator.emit { it.navigate(R.id.action_countersFragment_to_createCounterFragment) }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
+    override fun onCleared() {
         composite.clear()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        composite.dispose()
+        super.onCleared()
     }
 
 }

@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.example.countersapp.R
 import com.example.countersapp.databinding.FragmentCountersBinding
 import com.example.countersapp.ui.counters.adapter.CountersAdapter
 import com.example.countersapp.ui.counters.adapter.ItemActionsListener
@@ -58,7 +60,6 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     private fun setupViewModel() {
-        lifecycle.addObserver(countersViewModel)
         countersViewModel.countersStateLiveData.observe(viewLifecycleOwner) {
             handleState(it)
         }

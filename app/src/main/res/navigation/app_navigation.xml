@@ -22,7 +22,7 @@
         android:label="fragment_counters"
         tools:layout="@layout/fragment_counters">
         <action
-            android:id="@+id/action_countersFragment_to_editCounterFragment"
+            android:id="@+id/action_countersFragment_to_createCounterFragment"
             app:destination="@id/createCounterFragment" />
     </fragment>
     <fragment
