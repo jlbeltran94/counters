@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
@@ -46,25 +47,46 @@ class CountersFragment : Fragment(), ItemActionsListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setupCountersAdapter()
+        setupViewModel()
+        setupErrorState()
+        initListeners()
+        setupSearchView()
+        setupSelectingToolbar()
+        countersViewModel.getCounters()
+    }
+
+    private fun setupViewModel() {
         lifecycle.addObserver(countersViewModel)
-        countersAdapter.isSelectionEnabled = false
-        countersAdapter.listener = this
-        binding.successEstate.countersRecycler.adapter = countersAdapter
-        binding.errorEstate.retryButton.setOnClickListener {
-            countersViewModel.getCounters()
-        }
         countersViewModel.countersStateLiveData.observe(viewLifecycleOwner) {
             handleState(it)
         }
-        countersViewModel.getCounters()
+    }
+
+    private fun initListeners() {
         binding.createCounterButton.setOnClickListener {
             countersViewModel.navigateToCreateCounter()
         }
-        binding.searchBarView.setOnQueryTextFocusChangeListener { v, hasFocus ->
+    }
+
+    private fun setupErrorState() {
+        binding.errorEstate.retryButton.setOnClickListener {
+            countersViewModel.getCounters()
+        }
+    }
+
+    private fun setupCountersAdapter() {
+        countersAdapter.isSelectionEnabled = false
+        countersAdapter.listener = this
+        binding.successEstate.countersRecycler.adapter = countersAdapter
+    }
+
+    private fun setupSearchView() {
+        binding.searchBarView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             isSearching = hasFocus
         }
         binding.searchBarView.setOnQueryTextListener(object :
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 if (isSearching) countersViewModel.searchCounter(query)
                 return false
@@ -75,37 +97,45 @@ class CountersFragment : Fragment(), ItemActionsListener {
                 return false
             }
         })
+    }
+
+    private fun setupSelectingToolbar() {
         binding.toolbar.toolbarSelectingCounters.icClose.setOnClickListener {
             countersAdapter.isSelectionEnabled = false
         }
         binding.toolbar.toolbarSelectingCounters.shareCountersBtn.setOnClickListener {
-            val data = countersAdapter.getSelectedCounters().joinToString {
-                "${it.count}x${it.title}"
-            }
-            val sendIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, data)
-                type = "text/plain"
-            }
-            val shareIntent = Intent.createChooser(sendIntent, data)
-            startActivity(shareIntent)
+            startActivity(getShareIntent())
         }
-
         binding.toolbar.toolbarSelectingCounters.deleteCountersBtn.setOnClickListener {
-            val countersToDelete = countersAdapter.getSelectedCounters()
-            val countersToDeleteTitle = countersToDelete.joinToString {
-                "\"${it.title}\""
-            }
-            val deleteAction: ButtonAction = { _, _ ->
-                countersViewModel.deleteCounters(countersToDelete)
-            }
-            SimpleDialogFactory.createDialog(
-                requireContext(),
-                message = "Delete $countersToDeleteTitle?",
-                positiveButton = "Delete" to deleteAction,
-                negativeButton = "Cancel" to SimpleDialogFactory.noAction
-            ).show()
+            onClickDeleteCounters()
         }
+    }
+
+    private fun onClickDeleteCounters() {
+        val countersToDelete = countersAdapter.getSelectedCounters()
+        val countersToDeleteTitle = countersToDelete.joinToString { "\"${it.title}\"" }
+        val deleteAction: ButtonAction = { _, _ ->
+            countersViewModel.deleteCounters(countersToDelete)
+        }
+        SimpleDialogFactory.createDialog(
+            requireContext(),
+            message = "Delete $countersToDeleteTitle?",
+            positiveButton = "Delete" to deleteAction,
+            negativeButton = "Cancel" to SimpleDialogFactory.noAction
+        ).show()
+    }
+
+    private fun getShareIntent(): Intent {
+        val data = countersAdapter.getSelectedCounters().joinToString {
+            "${it.count}x${it.title}"
+        }
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, data)
+            type = "text/plain"
+        }
+        return Intent.createChooser(sendIntent, data)
+
     }
 
     private fun handleState(state: CountersFragmentState) {
@@ -128,7 +158,6 @@ class CountersFragment : Fragment(), ItemActionsListener {
                 showErrorDeletingDialog()
                 Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
-
             is CountersFragmentState.Error -> {
                 setViewStatesVisibility(binding.errorEstate)
                 Log.e("COUNTERS_FRAGMENT", state.throwable.message)
