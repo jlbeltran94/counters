@@ -1,6 +1,7 @@
 package com.example.countersapp.ui.counters
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,10 @@ import com.example.countersapp.ui.models.Counter
 import com.example.countersapp.util.invisible
 import com.example.countersapp.util.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_counters.view.*
+import kotlinx.android.synthetic.main.fragment_create_counter.view.*
+import kotlinx.android.synthetic.main.fragment_create_counter.view.icClose
+import kotlinx.android.synthetic.main.toolbar_selecting_counters.view.*
 
 @AndroidEntryPoint
 class CountersFragment : Fragment(), ItemActionsListener {
@@ -31,6 +36,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
         )
 
     private val countersAdapter by lazy { CountersAdapter() }
+    private var isSearching = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,19 +61,40 @@ class CountersFragment : Fragment(), ItemActionsListener {
         binding.createCounterButton.setOnClickListener {
             countersViewModel.navigateToCreateCounter()
         }
-        binding.searchBarView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+        binding.searchBarView.setOnQueryTextFocusChangeListener { v, hasFocus ->
+            isSearching = hasFocus
+        }
+        binding.searchBarView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                p0?.let { countersViewModel.searchCounter(it) }
+            override fun onQueryTextSubmit(query: String): Boolean {
+                if (isSearching) countersViewModel.searchCounter(query)
                 return false
             }
 
-            override fun onQueryTextChange(p0: String?): Boolean {
-                p0?.let { countersViewModel.searchCounter(it) }
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (isSearching) countersViewModel.searchCounter(newText)
                 return false
             }
-
         })
+        binding.toolbar.toolbarSelectingCounters.icClose.setOnClickListener {
+            countersAdapter.isSelectionEnabled = false
+        }
+        binding.toolbar.toolbarSelectingCounters.shareCountersBtn.setOnClickListener {
+            val data = countersAdapter.getSelectedCounters().joinToString {
+                "${it.count}x${it.title}"
+            }
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, data)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, data)
+            startActivity(shareIntent)
+        }
+
+        binding.toolbar.toolbarSelectingCounters.deleteCountersBtn.setOnClickListener{
+
+        }
     }
 
     private fun handleState(countersFragmentState: CountersFragmentState) {
@@ -146,6 +173,11 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     override fun onSelectionModeChanged(isSelectedEnabled: Boolean) {
-        binding.searchBarViewContainer.invisible(isSelectedEnabled)
+        binding.toolbar.searchBarContainer.visible(isSelectedEnabled.not())
+        binding.toolbar.toolbarSelectingCounters.visible(isSelectedEnabled)
+    }
+
+    override fun onSelectionChanges(selectedItems: Int) {
+        binding.toolbar.toolbarSelectingCounters.selectedCounters.text = "$selectedItems selected"
     }
 }

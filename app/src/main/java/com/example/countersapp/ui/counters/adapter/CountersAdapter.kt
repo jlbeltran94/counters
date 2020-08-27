@@ -8,11 +8,15 @@ import com.example.countersapp.util.inflate
 
 class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var isSelectionEnabled = false
+    var isSelectionEnabled = false
         set(value) {
             if (field != value) {
+                if (value.not()) {
+                    selectedCounters.clear()
+                }
                 field = value
                 listener?.onSelectionModeChanged(value)
+                notifyDataSetChanged()
             }
         }
     var counters: List<Counter> = listOf()
@@ -21,7 +25,7 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyDataSetChanged()
         }
     var listener: ItemActionsListener? = null
-    var selectedCounters = hashMapOf<String, Boolean>()
+    var selectedCounters = hashMapOf<Counter, Boolean>()
 
     override fun getItemViewType(position: Int): Int {
         return if (isSelectionEnabled) R.layout.item_counter_selectable else R.layout.item_counter
@@ -50,22 +54,28 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    fun getSelectedCounters(): List<Counter> {
+        return selectedCounters.mapNotNull { entry -> entry.key.takeIf { entry.value } }
+    }
+
+    private fun getSelectedItemsCount(): Int = selectedCounters.values.count { it }
+
     private fun bindSelectableCounterViewHolder(
         currentCounter: Counter,
         holder: SelectableCounterViewHolder,
         position: Int
     ) {
-        val currentState = selectedCounters[currentCounter.id] ?: false
+        val currentState = selectedCounters[currentCounter] ?: false
         holder.bind(currentCounter)
         holder.handleSelectedState(currentState)
         holder.setClickAction { counter ->
             val newState = currentState.not()
-            selectedCounters[counter.id] = newState
+            selectedCounters[counter] = newState
             if (selectedCounters.values.any { it }.not()) {
                 isSelectionEnabled = false
-                notifyDataSetChanged()
             } else {
                 notifyItemChanged(position)
+                listener?.onSelectionChanges(getSelectedItemsCount())
             }
         }
     }
@@ -78,9 +88,9 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         holder.registerDecreaseListener(listener)
         holder.registerIncreaseListener(listener)
         holder.setLongClickAction { counter ->
-            val currentState = selectedCounters[counter.id] ?: false
+            val currentState = selectedCounters[counter] ?: false
             val newState = currentState.not()
-            selectedCounters[counter.id] = newState
+            selectedCounters[counter] = newState
             isSelectionEnabled = true
             notifyDataSetChanged()
         }

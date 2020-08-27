@@ -7,26 +7,37 @@
     tools:context=".ui.counters.CountersFragment">
 
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/searchBarViewContainer"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="8dp"
+        android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchBarView"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/searchBarContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            app:iconifiedByDefault="false"
-            app:queryHint="Search Counters" />
-    </com.google.android.material.card.MaterialCardView>
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="8dp">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchBarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                app:iconifiedByDefault="false"
+                app:queryHint="Search Counters" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <include
+            android:id="@+id/toolbarSelectingCounters"
+            layout="@layout/toolbar_selecting_counters"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <include
         android:id="@+id/errorEstate"
@@ -37,7 +48,7 @@
         app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBarViewContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <include
         android:id="@+id/successEstate"
@@ -48,7 +59,7 @@
         app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBarViewContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <include
         android:id="@+id/loadingEstate"
@@ -59,7 +70,7 @@
         app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBarViewContainer" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/createCounterButton"

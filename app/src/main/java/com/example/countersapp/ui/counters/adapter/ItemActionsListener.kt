@@ -7,4 +7,5 @@ interface ItemActionsListener {
     fun onIncCounterAction(counter: Counter)
     fun onDecCounterAction(counter: Counter)
     fun onSelectionModeChanged(isSelectedEnabled: Boolean)
+    fun onSelectionChanges(selectedItems: Int)
 }
