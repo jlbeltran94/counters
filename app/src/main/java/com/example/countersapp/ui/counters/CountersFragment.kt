@@ -70,7 +70,8 @@ class CountersFragment : Fragment(), ItemActionsListener {
             clearSearch()
         }
     }
-    private fun clearSearch(){
+
+    private fun clearSearch() {
         countersViewModel.clearQuery()
         binding.toolbar.searchBarView.setQuery("", false)
         binding.toolbar.searchBarView.clearFocus()
@@ -89,6 +90,11 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     private fun setupSearchView() {
+        binding.searchBarView.findViewById<View>(androidx.appcompat.R.id.search_close_btn).setOnClickListener {
+            isSearching = true
+            clearSearch()
+        }
+
         binding.searchBarView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             isSearching = hasFocus
         }
@@ -159,6 +165,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
                 Log.e("COUNTERS_FRAGMENT", state.throwable.message)
             }
             is CountersFragmentState.NoSearchResults -> {
+                countersAdapter.counters = emptyList()
                 setViewStatesVisibility(binding.noSearchResultsState)
             }
             is CountersFragmentState.DeleteError -> {

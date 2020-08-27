@@ -103,7 +103,12 @@ class CountersViewModel @ViewModelInject constructor(
             .applySchedulers()
             .subscribeBy(
                 onSuccess = {
-                    _countersStateLiveData.value = CountersFragmentState.Success(it)
+                    if (query.isNotEmpty() && it.isEmpty()) {
+                        _countersStateLiveData.value = CountersFragmentState.NoSearchResults
+                    } else {
+                        _countersStateLiveData.value = CountersFragmentState.Success(it)
+                    }
+
                 }, onError = {
                     _countersStateLiveData.value =
                         CountersFragmentState.DeleteError(it)
