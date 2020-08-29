@@ -87,11 +87,16 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava3:$rootProject.ext.retrofit_version"
     implementation "com.google.code.gson:gson:$rootProject.ext.gson_version"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.ext.ok_http_version"
 
     //RX
     implementation "io.reactivex.rxjava3:rxandroid:$rootProject.ext.rx_version"
     implementation "io.reactivex.rxjava3:rxjava:$rootProject.ext.rx_version"
     implementation "io.reactivex.rxjava3:rxkotlin:$rootProject.ext.rx_version"
+
+    //mockito
+    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockito_version"
+    testImplementation "org.mockito:mockito-inline:$rootProject.ext.mockito_inline_version"
 
 
 }

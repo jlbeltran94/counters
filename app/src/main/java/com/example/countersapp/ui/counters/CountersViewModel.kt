@@ -1,7 +1,10 @@
 package com.example.countersapp.ui.counters
 
+import androidx.annotation.VisibleForTesting
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.countersapp.R
 import com.example.countersapp.domain.CountersInteractor
 import com.example.countersapp.ui.models.Counter
@@ -119,6 +122,11 @@ class CountersViewModel @ViewModelInject constructor(
 
     fun clearQuery() {
         query = ""
+    }
+
+    @VisibleForTesting
+    fun setQuery(query: String) {
+        this.query = query
     }
 
     fun navigateToCreateCounter() {
