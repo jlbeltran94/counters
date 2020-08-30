@@ -8,12 +8,12 @@
 
     <TextView
         android:id="@+id/counterTitle"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/zero"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="@dimen/medium"
+        android:layout_marginTop="@dimen/medium"
+        android:layout_marginEnd="@dimen/big"
+        android:layout_marginBottom="@dimen/medium"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="17sp"
@@ -28,7 +28,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="@dimen/medium"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -37,8 +37,8 @@
 
         <ImageView
             android:id="@+id/decBtn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
             app:srcCompat="@drawable/ic_minus" />
 
         <TextView
@@ -46,14 +46,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="@dimen/x_small"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             tools:text="5" />
 
         <ImageView
             android:id="@+id/incBtn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
             app:srcCompat="@drawable/ic_add" />
 
 

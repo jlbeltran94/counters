@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="0dp"
-    android:layout_height="0dp">
+    android:layout_width="@dimen/zero"
+    android:layout_height="@dimen/zero">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Couldn’t load the counters"
+            android:text="@string/error_get_counters"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textStyle="bold" />
 
@@ -29,8 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingVertical="8dp"
-            android:text="The Internet connection appears to be offline."
+            android:paddingVertical="@dimen/x_small"
+            android:text="@string/no_internet_message"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -39,6 +39,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Retry" />
+            android:text="@string/retry" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,10 +16,10 @@
 
             <TextView
                 android:id="@+id/numberOfCounters"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="@dimen/medium"
+                android:layout_marginTop="@dimen/small"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -27,9 +27,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/countersRecycler"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="8dp"
+                android:layout_width="@dimen/zero"
+                android:layout_height="@dimen/zero"
+                android:layout_marginBottom="@dimen/x_small"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout4"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/zero"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="No counters yet"
+                    android:text="@string/no_counters_yet"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textStyle="bold" />
@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="“When I started counting my blessings, my whole life turned around.” \n —Willie Nelson"
+                    android:text="@string/no_counters_phrase"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
             </LinearLayout>
@@ -89,7 +89,7 @@
                 android:id="@+id/totalTimes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/x_small"
                 app:layout_constraintStart_toEndOf="@+id/numberOfCounters"
                 app:layout_constraintTop_toTopOf="@+id/numberOfCounters"
                 tools:text="17 times" />

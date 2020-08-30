@@ -1,7 +1,38 @@
 <resources>
     <string name="app_name">CountersApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="no_internet_message">The internet connection appears to be offline</string>
+    <string name="error_get_counters">Couldn’t load the counters</string>
+    <string name="error_update_counter">Couldn’t update the \"%1$s\" to %2$d</string>
+    <string name="retry">Retry</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="error_delete">Couldn’t delete the counter</string>
+    <string name="ok">OK</string>
+    <string name="items_selected">%d selected</string>
+    <string name="error_creating">Couldn’t crate the counter</string>
+    <string name="no_name_error">Please give it a name!</string>
+    <string name="delete_counter_alert_title">Delete %s?</string>
+    <string name="quoted_string">\"%s\"</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="plain_text">text/plain</string>
+    <string name="share_counter">%1$dx%2$s</string>
+    <string name="add_counter">Add counter</string>
+    <string name="create_counter">Create counter</string>
+    <string name="save">Save</string>
+    <string name="name">Name</string>
+    <string name="counters">Counters</string>
+    <string name="welcome_message">Capture cups of lattes, frapuccinos,\n or anything else that can be counted.</string>
+    <string name="get_started">Get started</string>
+    <string name="no_counters_yet">No counters yet</string>
+    <string name="no_counters_phrase">“When I started counting my blessings, my whole life turned around.” \n —Willie Nelson</string>
+    <string name="no_results">No results</string>
+
+    <plurals name="items_found">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+    <plurals name="count_times">
+        <item quantity="one">Once</item>
+        <item quantity="other">%d times</item>
+    </plurals>
 </resources>

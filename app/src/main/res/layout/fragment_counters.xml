@@ -9,7 +9,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/zero"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +19,8 @@
             android:id="@+id/searchBarContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:cardCornerRadius="8dp">
+            android:layout_marginHorizontal="@dimen/small"
+            app:cardCornerRadius="@dimen/x_small">
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchBarView"
@@ -42,8 +42,8 @@
     <include
         android:id="@+id/errorState"
         layout="@layout/layout_counters_error"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,8 +53,8 @@
     <include
         android:id="@+id/noSearchResultsState"
         layout="@layout/layout_counters_no_search_results_state"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,8 +64,8 @@
     <include
         android:id="@+id/successState"
         layout="@layout/layout_counters_has_data_state"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,8 +75,8 @@
     <include
         android:id="@+id/loadingState"
         layout="@layout/layout_counters_loading_state"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/createCounterButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,10 +87,10 @@
         android:id="@+id/createCounterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Add counter"
+        android:layout_marginBottom="@dimen/small"
+        android:text="@string/add_counter"
         app:icon="@drawable/ic_add"
-        app:iconPadding="0dp"
+        app:iconPadding="@dimen/zero"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

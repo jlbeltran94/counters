@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="small">16dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="x_small">8dp</dimen>
+    <dimen name="xx_small">3dp</dimen>
+    <dimen name="toolbar_font_size">20sp</dimen>
+    <dimen name="big">32dp</dimen>
+    <dimen name="medium">24dp</dimen>
+    <dimen name="icon_small">24dp</dimen>
+</resources>
