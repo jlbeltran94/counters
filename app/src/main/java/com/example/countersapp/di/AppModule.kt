@@ -4,12 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.countersapp.data.api.CountersService
 import com.example.countersapp.data.api.Endpoints.URL_BASE
-import com.example.countersapp.ui.models.CounterMapper
-import com.example.countersapp.ui.models.CounterMapperImp
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -43,7 +40,4 @@ object AppModule {
     fun providePreference(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences("counters", 0)
 
-    @Reusable
-    @Provides
-    fun provideMapper(): CounterMapper = CounterMapperImp()
 }

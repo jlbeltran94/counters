@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.example.countersapp.R
 import com.example.countersapp.databinding.FragmentCountersBinding
@@ -91,10 +90,11 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     private fun setupSearchView() {
-        binding.searchBarView.findViewById<View>(androidx.appcompat.R.id.search_close_btn).setOnClickListener {
-            isSearching = true
-            clearSearch()
-        }
+        binding.searchBarView.findViewById<View>(androidx.appcompat.R.id.search_close_btn)
+            .setOnClickListener {
+                isSearching = true
+                clearSearch()
+            }
 
         binding.searchBarView.setOnQueryTextFocusChangeListener { _, hasFocus ->
             isSearching = hasFocus
@@ -127,26 +127,28 @@ class CountersFragment : Fragment(), ItemActionsListener {
 
     private fun onClickDeleteCounters() {
         val countersToDelete = countersAdapter.getSelectedCounters()
-        val countersToDeleteTitle = countersToDelete.joinToString { "\"${it.title}\"" }
+        val countersToDeleteTitle = countersToDelete.joinToString {
+            getString(R.string.quoted_string, it.title)
+        }
         val deleteAction: ButtonAction = { _, _ ->
             countersViewModel.deleteCounters(countersToDelete)
         }
         SimpleDialogFactory.createDialog(
             requireContext(),
-            message = "Delete $countersToDeleteTitle?",
-            positiveButton = "Delete" to deleteAction,
-            negativeButton = "Cancel" to SimpleDialogFactory.noAction
+            message = getString(R.string.delete_counter_alert_title, countersToDeleteTitle),
+            positiveButton = getString(R.string.delete) to deleteAction,
+            negativeButton = getString(R.string.cancel) to SimpleDialogFactory.noAction
         ).show()
     }
 
     private fun getShareIntent(): Intent {
         val data = countersAdapter.getSelectedCounters().joinToString {
-            "${it.count}x${it.title}"
+            getString(R.string.share_counter, it.count, it.title)
         }
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, data)
-            type = "text/plain"
+            type = getString(R.string.plain_text)
         }
         return Intent.createChooser(sendIntent, data)
 
@@ -163,7 +165,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
             }
             is CountersFragmentState.ErrorAction -> {
                 createErrorActionDialog(state)
-                Log.e("COUNTERS_FRAGMENT", state.throwable.message)
+                Log.e(TAG, state.throwable.message.orEmpty(), state.throwable)
             }
             is CountersFragmentState.NoSearchResults -> {
                 countersAdapter.counters = emptyList()
@@ -171,11 +173,11 @@ class CountersFragment : Fragment(), ItemActionsListener {
             }
             is CountersFragmentState.DeleteError -> {
                 showErrorDeletingDialog()
-                Log.e("COUNTERS_FRAGMENT", state.throwable.message)
+                Log.e(TAG, state.throwable.message.orEmpty(), state.throwable)
             }
             is CountersFragmentState.Error -> {
                 setViewStatesVisibility(binding.errorState)
-                Log.e("COUNTERS_FRAGMENT", state.throwable.message)
+                Log.e(TAG, state.throwable.message.orEmpty(), state.throwable)
             }
         }
     }
@@ -187,8 +189,15 @@ class CountersFragment : Fragment(), ItemActionsListener {
             count + counter.count
         }
         binding.successState.numberOfCounters.text =
-            if (data.isNotEmpty()) "${data.size} items" else ""
-        binding.successState.totalTimes.text = if (data.isNotEmpty()) "$times times" else ""
+            resources.getQuantityString(R.plurals.items_found, data.size, data.size)
+                .takeIf { data.isNotEmpty() }
+                .orEmpty()
+
+        binding.successState.totalTimes.text =
+            resources.getQuantityString(R.plurals.count_times, times, times)
+                .takeIf { data.isNotEmpty() }
+                .orEmpty()
+
         binding.successState.noDataGroup.visible(data.isEmpty())
         binding.successState.hasDataGroup.visible(data.isNotEmpty())
         binding.successState.swipeToRefreshCounters.setOnRefreshListener {
@@ -206,29 +215,29 @@ class CountersFragment : Fragment(), ItemActionsListener {
     private fun createErrorActionDialog(errorAction: CountersFragmentState.ErrorAction) {
         val counter = errorAction.counter
         val expectedQty = when (errorAction.action) {
-            CountersAction.INCREASE -> counter.count + 1
-            CountersAction.DECREASE -> counter.count - 1
+            CounterAction.INCREASE -> counter.count + 1
+            CounterAction.DECREASE -> counter.count - 1
         }
         val retryAction: ButtonAction = { _, _ ->
             when (errorAction.action) {
-                CountersAction.INCREASE -> countersViewModel.incCounter(counter)
-                CountersAction.DECREASE -> countersViewModel.decCounter(counter)
+                CounterAction.INCREASE -> countersViewModel.incCounter(counter)
+                CounterAction.DECREASE -> countersViewModel.decCounter(counter)
             }
         }
         SimpleDialogFactory.createDialog(
             requireContext(),
-            title = "Couldn't update the \"${counter.title}\" to $expectedQty",
-            message = "The internet connection appears to be offline",
-            positiveButton = "Dismiss" to SimpleDialogFactory.noAction,
-            negativeButton = "Retry" to retryAction
+            title = getString(R.string.error_update_counter, counter.title, expectedQty),
+            message = getString(R.string.no_internet_message),
+            positiveButton = getString(R.string.dismiss) to SimpleDialogFactory.noAction,
+            negativeButton = getString(R.string.retry) to retryAction
         ).show()
     }
 
     private fun showErrorDeletingDialog() {
         SimpleDialogFactory.createDialog(
             requireContext(),
-            message = "Couldn't delete the counter",
-            positiveButton = "Ok" to SimpleDialogFactory.noAction
+            message = getString(R.string.error_delete),
+            positiveButton = getString(R.string.ok) to SimpleDialogFactory.noAction
         ).show()
     }
 
@@ -246,6 +255,11 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     override fun onSelectionChanges(selectedItems: Int) {
-        binding.toolbar.toolbarSelectingCounters.selectedCounters.text = "$selectedItems selected"
+        binding.toolbar.toolbarSelectingCounters.selectedCounters.text =
+            getString(R.string.items_selected, selectedItems)
+    }
+
+    companion object {
+        private val TAG = CountersFragment::class.java.simpleName
     }
 }

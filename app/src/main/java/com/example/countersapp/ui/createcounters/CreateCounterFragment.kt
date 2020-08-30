@@ -7,17 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.countersapp.R
 import com.example.countersapp.databinding.FragmentCreateCounterBinding
 import com.example.countersapp.util.SimpleDialogFactory
 import com.example.countersapp.util.invisible
 import dagger.hilt.android.AndroidEntryPoint
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateCounterFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 @AndroidEntryPoint
 class CreateCounterFragment : Fragment() {
 
@@ -40,13 +35,13 @@ class CreateCounterFragment : Fragment() {
             handleState(it)
         }
         binding.btnSave.setOnClickListener { _ ->
-            binding.createCounterTextInputLayout.error = ""
+            binding.createCounterTextInputLayout.error = null
             binding.createCounterTextInputLayout.editText?.text.toString().takeIf {
                 it.isNotEmpty()
             }?.let {
                 createCountersViewModel.createCounter(it)
             } ?: kotlin.run {
-                binding.createCounterTextInputLayout.error = "Please give it a name!"
+                binding.createCounterTextInputLayout.error = getString(R.string.no_name_error)
             }
         }
         binding.icClose.setOnClickListener {
@@ -65,7 +60,8 @@ class CreateCounterFragment : Fragment() {
             is CreateCounterFragmentState.Error -> {
                 setSavingVisibility(btnInvisible = false, progressBarInvisible = true)
                 showErrorDialog()
-                Log.e("COUNTERS_FRAGMENT", createCounterFragmentState.throwable.message)
+                val throwable = createCounterFragmentState.throwable
+                Log.e(TAG, throwable.message.orEmpty(), throwable)
             }
         }
     }
@@ -73,14 +69,18 @@ class CreateCounterFragment : Fragment() {
     private fun showErrorDialog() {
         SimpleDialogFactory.createDialog(
             requireContext(),
-            title = "Couldn't crate the counter",
-            message = "The internet connection appears to be offline",
-            positiveButton = "Ok" to SimpleDialogFactory.noAction
+            title = getString(R.string.error_creating),
+            message = getString(R.string.no_internet_message),
+            positiveButton = getString(R.string.ok) to SimpleDialogFactory.noAction
         ).show()
     }
 
     private fun setSavingVisibility(btnInvisible: Boolean, progressBarInvisible: Boolean) {
         binding.saveProgressBar.invisible(progressBarInvisible)
         binding.btnSave.invisible(btnInvisible)
+    }
+
+    companion object {
+        private val TAG = CreateCounterFragment::class.java.simpleName
     }
 }

@@ -5,21 +5,21 @@ import androidx.lifecycle.Observer
 import com.example.countersapp.data.api.models.CounterResponseModel
 import com.example.countersapp.ui.models.Counter
 import com.example.countersapp.ui.models.CounterMapper
-import com.example.countersapp.ui.models.CounterMapperImp
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.mockito.Mockito
 import java.io.File
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 object TestUtils {
-    var mapper: CounterMapper = CounterMapperImp()
+    private var mapper: CounterMapper = CounterMapper()
     fun getJson(path: String): String {
         val uri = this.javaClass.classLoader?.getResource(path)
-        val file = File(uri?.path)
-        return String(file.readBytes())
+        return uri?.let {
+            val file = File(it.path)
+            String(file.readBytes())
+        }.orEmpty()
     }
 
     fun getCounterResponseModels(): List<CounterResponseModel> {

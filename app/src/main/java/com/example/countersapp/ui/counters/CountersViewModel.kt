@@ -74,7 +74,7 @@ class CountersViewModel @ViewModelInject constructor(
                     _countersStateLiveData.value = CountersFragmentState.Success(it)
                 }, onError = {
                     _countersStateLiveData.value =
-                        CountersFragmentState.ErrorAction(counter, CountersAction.INCREASE, it)
+                        CountersFragmentState.ErrorAction(counter, CounterAction.INCREASE, it)
                 }
             )
     }
@@ -91,7 +91,7 @@ class CountersViewModel @ViewModelInject constructor(
                     _countersStateLiveData.value = CountersFragmentState.Success(it)
                 }, onError = {
                     _countersStateLiveData.value =
-                        CountersFragmentState.ErrorAction(counter, CountersAction.DECREASE, it)
+                        CountersFragmentState.ErrorAction(counter, CounterAction.DECREASE, it)
                 }
             )
     }

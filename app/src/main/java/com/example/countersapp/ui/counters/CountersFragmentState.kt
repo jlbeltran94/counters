@@ -7,7 +7,7 @@ sealed class CountersFragmentState {
     data class Error(val throwable: Throwable) : CountersFragmentState()
     data class ErrorAction(
         val counter: Counter,
-        val action: CountersAction,
+        val action: CounterAction,
         val throwable: Throwable
     ) : CountersFragmentState()
 
