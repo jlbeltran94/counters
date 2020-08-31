@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CountersApp</string>
+    <string name="app_name">Counters</string>
     <string name="no_internet_message">The internet connection appears to be offline</string>
     <string name="error_get_counters">Couldn’t load the counters</string>
     <string name="error_update_counter">Couldn’t update the \"%1$s\" to %2$d</string>
