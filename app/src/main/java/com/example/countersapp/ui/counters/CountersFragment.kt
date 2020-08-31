@@ -15,11 +15,9 @@ import com.example.countersapp.databinding.FragmentCountersBinding
 import com.example.countersapp.ui.counters.adapters.CountersAdapter
 import com.example.countersapp.ui.counters.listeners.ItemActionsListener
 import com.example.countersapp.ui.models.Counter
-import com.example.countersapp.util.ButtonAction
+import com.example.countersapp.util.*
+import com.example.countersapp.util.Constants.COUNTERS_KEY
 import com.example.countersapp.util.Constants.EMPTY
-import com.example.countersapp.util.SimpleDialogFactory
-import com.example.countersapp.util.observe
-import com.example.countersapp.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_counters.view.*
 import kotlinx.android.synthetic.main.fragment_create_counter.view.icClose
@@ -57,7 +55,9 @@ class CountersFragment : Fragment(), ItemActionsListener {
         initListeners()
         setupSearchView()
         setupSelectingToolbar()
-        countersViewModel.getCounters()
+        observeSavedStateLiveData<List<Counter>>(COUNTERS_KEY) {
+            handleSuccessState(it)
+        }
     }
 
     private fun setupViewModel() {
@@ -166,7 +166,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
                 binding.successState.progressBarLoadingAction.visible()
             }
             is CountersFragmentState.Success -> {
-                handleSuccessState(state)
+                handleSuccessState(state.data)
             }
             is CountersFragmentState.ErrorAction -> {
                 createErrorActionDialog(state)
@@ -192,28 +192,27 @@ class CountersFragment : Fragment(), ItemActionsListener {
         binding.successState.progressBarLoadingAction.visible(false)
     }
 
-    private fun handleSuccessState(countersFragmentState: CountersFragmentState.Success) {
-        val data = countersFragmentState.data
+    private fun handleSuccessState(counters: List<Counter>) {
         setViewStatesVisibility(binding.successState)
-        val times = data.fold(0) { count, counter ->
+        val times = counters.fold(0) { count, counter ->
             count + counter.count
         }
         binding.successState.numberOfCounters.text =
-            resources.getQuantityString(R.plurals.items_found, data.size, data.size)
-                .takeIf { data.isNotEmpty() }
+            resources.getQuantityString(R.plurals.items_found, counters.size, counters.size)
+                .takeIf { counters.isNotEmpty() }
                 .orEmpty()
 
         binding.successState.totalTimes.text =
             resources.getQuantityString(R.plurals.count_times, times, times)
-                .takeIf { data.isNotEmpty() }
+                .takeIf { counters.isNotEmpty() }
                 .orEmpty()
 
-        binding.successState.noDataGroup.visible(data.isEmpty())
-        binding.successState.hasDataGroup.visible(data.isNotEmpty())
+        binding.successState.noDataGroup.visible(counters.isEmpty())
+        binding.successState.hasDataGroup.visible(counters.isNotEmpty())
         binding.successState.swipeToRefreshCounters.setOnRefreshListener {
             countersViewModel.getCounters(false)
         }
-        countersAdapter.counters = data
+        countersAdapter.counters = counters
     }
 
     private fun setViewStatesVisibility(viewBinding: ViewBinding) {

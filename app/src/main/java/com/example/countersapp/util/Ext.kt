@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.example.countersapp.ui.models.Counter
 
 
 fun ViewBinding.visible(visible: Boolean = true) {
@@ -51,3 +52,7 @@ fun <T> Fragment.observe(liveData: LiveData<T>?, observer: Observer<in T>) {
 
 fun <T> Fragment.getSavedStateLiveData(key: String) =
     findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)
+
+fun <T> Fragment.observeSavedStateLiveData(key: String, observer: Observer<in T>) {
+    observe(getSavedStateLiveData<T>(key), observer)
+}

@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.countersapp.R
 import com.example.countersapp.domain.CountersInteractor
+import com.example.countersapp.ui.models.Counter
 import com.example.countersapp.ui.navigation.NavigationDispatcher
+import com.example.countersapp.util.Constants
 import com.example.countersapp.util.applySchedulers
+import com.example.countersapp.util.navigateBackWithResult
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -37,6 +40,10 @@ class CreateCounterViewModel @ViewModelInject constructor(
 
     fun navigateBack() {
         navigator.emit { it.popBackStack() }
+    }
+
+    fun navigateBack(counters: List<Counter>) {
+        navigator.emit { it.navigateBackWithResult(Constants.COUNTERS_KEY, counters) }
     }
 
     fun navigateToExamples() {

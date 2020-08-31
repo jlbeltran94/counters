@@ -64,7 +64,7 @@ class CreateCounterFragment : Fragment() {
                 setSavingVisibility(btnInvisible = true, progressBarInvisible = false)
             }
             is CreateCounterFragmentState.Success -> {
-                createCountersViewModel.navigateBack()
+                createCountersViewModel.navigateBack(createCounterFragmentState.data)
             }
             is CreateCounterFragmentState.Error -> {
                 setSavingVisibility(btnInvisible = false, progressBarInvisible = true)

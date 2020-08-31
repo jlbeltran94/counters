@@ -27,6 +27,10 @@ class CountersViewModel @ViewModelInject constructor(
     val countersStateLiveData: LiveData<CountersFragmentState> = _countersStateLiveData
     private var cachedCounters: List<Counter> = listOf()
 
+    init {
+        getCounters()
+    }
+
     fun getCounters(loading: Boolean = true) {
         if (loading) _countersStateLiveData.value = CountersFragmentState.Loading
         composite += countersInteractor.getCounters()
