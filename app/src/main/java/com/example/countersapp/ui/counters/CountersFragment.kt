@@ -157,10 +157,13 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     private fun handleState(state: CountersFragmentState) {
-        binding.successState.swipeToRefreshCounters.isRefreshing = false
+        stopLoaders()
         when (state) {
             is CountersFragmentState.Loading -> {
                 setViewStatesVisibility(binding.loadingState)
+            }
+            is CountersFragmentState.LoadingAction -> {
+                binding.successState.progressBarLoadingAction.visible()
             }
             is CountersFragmentState.Success -> {
                 handleSuccessState(state)
@@ -184,6 +187,11 @@ class CountersFragment : Fragment(), ItemActionsListener {
         }
     }
 
+    private fun stopLoaders() {
+        binding.successState.swipeToRefreshCounters.isRefreshing = false
+        binding.successState.progressBarLoadingAction.visible(false)
+    }
+
     private fun handleSuccessState(countersFragmentState: CountersFragmentState.Success) {
         val data = countersFragmentState.data
         setViewStatesVisibility(binding.successState)
@@ -203,7 +211,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
         binding.successState.noDataGroup.visible(data.isEmpty())
         binding.successState.hasDataGroup.visible(data.isNotEmpty())
         binding.successState.swipeToRefreshCounters.setOnRefreshListener {
-            countersViewModel.getCounters()
+            countersViewModel.getCounters(false)
         }
         countersAdapter.counters = data
     }

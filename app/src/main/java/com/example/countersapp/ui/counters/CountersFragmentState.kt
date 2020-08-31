@@ -11,6 +11,7 @@ sealed class CountersFragmentState {
         val throwable: Throwable
     ) : CountersFragmentState()
 
+    object LoadingAction : CountersFragmentState()
     data class DeleteError(val throwable: Throwable) : CountersFragmentState()
     data class Success(val data: List<Counter>) : CountersFragmentState()
     object NoSearchResults : CountersFragmentState()

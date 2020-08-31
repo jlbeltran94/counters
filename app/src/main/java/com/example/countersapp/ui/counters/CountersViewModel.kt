@@ -27,8 +27,8 @@ class CountersViewModel @ViewModelInject constructor(
     val countersStateLiveData: LiveData<CountersFragmentState> = _countersStateLiveData
     private var cachedCounters: List<Counter> = listOf()
 
-    fun getCounters() {
-        _countersStateLiveData.value = CountersFragmentState.Loading
+    fun getCounters(loading: Boolean = true) {
+        if (loading) _countersStateLiveData.value = CountersFragmentState.Loading
         composite += countersInteractor.getCounters()
             .doOnSuccess { cachedCounters = it }
             .flatMapObservable { it.toObservable() }
@@ -64,6 +64,7 @@ class CountersViewModel @ViewModelInject constructor(
     }
 
     fun incCounter(counter: Counter) {
+        _countersStateLiveData.value = CountersFragmentState.LoadingAction
         composite += countersInteractor.increaseCounter(counter.id)
             .doOnSuccess { cachedCounters = it }
             .flatMapObservable { it.toObservable() }
@@ -81,6 +82,7 @@ class CountersViewModel @ViewModelInject constructor(
     }
 
     fun decCounter(counter: Counter) {
+        _countersStateLiveData.value = CountersFragmentState.LoadingAction
         composite += countersInteractor.decreaseCounter(counter.id)
             .doOnSuccess { cachedCounters = it }
             .flatMapObservable { it.toObservable() }
@@ -98,6 +100,7 @@ class CountersViewModel @ViewModelInject constructor(
     }
 
     fun deleteCounters(counters: List<Counter>) {
+        _countersStateLiveData.value = CountersFragmentState.LoadingAction
         composite += counters.toObservable()
             .flatMapSingle { countersInteractor.deleteCounter(it.id) }
             .lastOrError()
@@ -121,7 +124,8 @@ class CountersViewModel @ViewModelInject constructor(
             )
     }
 
-    private fun getFilterCondition(counter: Counter) = query.isEmpty() || counter.title.startsWith(query, true)
+    private fun getFilterCondition(counter: Counter) =
+        query.isEmpty() || counter.title.startsWith(query, true)
 
     fun clearQuery() {
         query = EMPTY
