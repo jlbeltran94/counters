@@ -1,4 +1,4 @@
-package com.example.countersapp.ui.counters.adapter
+package com.example.countersapp.ui.counters.listeners
 
 import com.example.countersapp.ui.models.Counter
 

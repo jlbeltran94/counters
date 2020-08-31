@@ -1,4 +1,4 @@
-package com.example.countersapp.ui.createcounters
+package com.example.countersapp.ui.createcounter
 
 import android.os.Bundle
 import android.util.Log
@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.countersapp.R
 import com.example.countersapp.databinding.FragmentCreateCounterBinding
+import com.example.countersapp.util.Constants.SELECTED_EXAMPLE_KEY
 import com.example.countersapp.util.SimpleDialogFactory
+import com.example.countersapp.util.getSavedStateLiveData
 import com.example.countersapp.util.invisible
+import com.example.countersapp.util.observe
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,7 +34,7 @@ class CreateCounterFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        createCountersViewModel.stateLiveData.observe(viewLifecycleOwner) {
+        observe(createCountersViewModel.stateLiveData) {
             handleState(it)
         }
         binding.btnSave.setOnClickListener { _ ->
@@ -46,6 +49,12 @@ class CreateCounterFragment : Fragment() {
         }
         binding.icClose.setOnClickListener {
             createCountersViewModel.navigateBack()
+        }
+        binding.textViewSeeExamples.setOnClickListener {
+            createCountersViewModel.navigateToExamples()
+        }
+        observe(getSavedStateLiveData<String>(SELECTED_EXAMPLE_KEY)) {
+            binding.createCounterTextInputEdit.setText(it)
         }
     }
 

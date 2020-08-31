@@ -1,4 +1,4 @@
-package com.example.countersapp.ui.createcounters
+package com.example.countersapp.ui.createcounter
 
 import com.example.countersapp.ui.models.Counter
 

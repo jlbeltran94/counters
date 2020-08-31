@@ -1,4 +1,4 @@
-package com.example.countersapp.ui.counters.adapter
+package com.example.countersapp.ui.counters.adapters
 
 import android.content.res.ColorStateList
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countersapp.R
 import com.example.countersapp.databinding.ItemCounterBinding
+import com.example.countersapp.ui.counters.listeners.ItemActionsListener
 import com.example.countersapp.ui.models.Counter
 import java.lang.IllegalStateException
 

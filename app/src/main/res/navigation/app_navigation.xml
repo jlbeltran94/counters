@@ -27,7 +27,12 @@
     </fragment>
     <fragment
         android:id="@+id/createCounterFragment"
-        android:name="com.example.countersapp.ui.createcounters.CreateCounterFragment"
+        android:name="com.example.countersapp.ui.createcounter.CreateCounterFragment"
         android:label="fragment_create_counter"
         tools:layout="@layout/fragment_create_counter" />
+    <fragment
+        android:id="@+id/examplesFragment"
+        android:name="com.example.countersapp.ui.examples.ExamplesFragment"
+        android:label="fragment_examples"
+        tools:layout="@layout/fragment_examples" />
 </navigation>

@@ -1,6 +1,7 @@
-package com.example.countersapp.ui.models
+package com.example.countersapp.domain
 
 import com.example.countersapp.data.api.models.CounterResponseModel
+import com.example.countersapp.ui.models.Counter
 import javax.inject.Inject
 
 class CounterMapper @Inject constructor() {

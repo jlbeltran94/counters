@@ -4,6 +4,11 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 
 
@@ -34,3 +39,15 @@ fun SharedPreferences.save(vararg data: Pair<String, Any>) {
     }
     editor.apply()
 }
+
+fun <T> NavController.navigateBackWithResult(key: String, value: T) {
+    previousBackStackEntry?.savedStateHandle?.set(key, value)
+    popBackStack()
+}
+
+fun <T> Fragment.observe(liveData: LiveData<T>?, observer: Observer<in T>) {
+    liveData?.observe(viewLifecycleOwner, observer)
+}
+
+fun <T> Fragment.getSavedStateLiveData(key: String) =
+    findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<T>(key)

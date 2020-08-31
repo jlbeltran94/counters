@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.countersapp.data.api.CountersService
 import com.example.countersapp.data.api.Endpoints.URL_BASE
+import com.example.countersapp.data.local.ExamplesDataSource
+import com.example.countersapp.data.local.StaticExamplesDataSource
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -39,5 +41,10 @@ object AppModule {
     @Provides
     fun providePreference(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences("counters", 0)
+
+    @Singleton
+    @Provides
+    fun provideExamplesDataSource(): ExamplesDataSource = StaticExamplesDataSource()
+
 
 }

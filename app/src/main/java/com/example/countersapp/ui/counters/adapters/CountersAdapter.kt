@@ -1,8 +1,10 @@
-package com.example.countersapp.ui.counters.adapter
+package com.example.countersapp.ui.counters.adapters
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countersapp.R
+import com.example.countersapp.ui.counters.listeners.ItemActionsListener
 import com.example.countersapp.ui.models.Counter
 import com.example.countersapp.util.inflate
 
@@ -11,10 +13,10 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var isSelectionEnabled = false
         set(value) {
             if (field != value) {
+                field = value
                 if (value.not()) {
                     selectedCounters.clear()
                 }
-                field = value
                 listener?.onSelectionModeChanged(value)
                 notifyDataSetChanged()
             }
@@ -23,19 +25,8 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var counters: List<Counter> = listOf()
         set(value) {
             field = value
-            val ssc = HashMap(selectedCounters)
-            selectedCounters.apply {
-                clear()
-                value.forEach {
-                    this[it] = ssc[it] ?: false
-                }
-            }
-            val selectedCount = getSelectedItemsCount()
-            if (selectedCount > 0) {
-                listener?.onSelectionChanges(selectedCount)
-            } else {
-                isSelectionEnabled = false
-            }
+            updateSelectedCounters(value)
+            verifyCountersSelected()
             notifyDataSetChanged()
         }
 
@@ -50,11 +41,7 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView = parent.inflate(viewType)
-        return if (isSelectionEnabled) {
-            SelectableCounterViewHolder(itemView)
-        } else {
-            CounterViewHolder(itemView)
-        }
+        return getViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -73,6 +60,13 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return selectedCounters.mapNotNull { entry -> entry.key.takeIf { entry.value } }
     }
 
+    private fun getViewHolder(itemView: View): RecyclerView.ViewHolder {
+        return if (isSelectionEnabled) {
+            SelectableCounterViewHolder(itemView)
+        } else {
+            CounterViewHolder(itemView)
+        }
+    }
     private fun getSelectedItemsCount(): Int = selectedCounters.values.count { it }
 
     private fun bindSelectableCounterViewHolder(
@@ -111,5 +105,23 @@ class CountersAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    private fun verifyCountersSelected() {
+        val selectedCount = getSelectedItemsCount()
+        val areCountersSelected = selectedCount > 0
+        if (areCountersSelected) {
+            listener?.onSelectionChanges(selectedCount)
+        } else {
+            isSelectionEnabled = false
+        }
+    }
 
+    private fun updateSelectedCounters(newCounters: List<Counter>) {
+        val currentSelectedCounters = HashMap(selectedCounters)
+        selectedCounters.apply {
+            clear()
+            newCounters.forEach {
+                this[it] = currentSelectedCounters[it] ?: false
+            }
+        }
+    }
 }

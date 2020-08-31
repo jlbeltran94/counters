@@ -1,5 +1,6 @@
-package com.example.countersapp.ui.models
+package com.example.countersapp.domain
 
+import com.example.countersapp.ui.models.Counter
 import com.example.countersapp.utils.TestUtils
 import org.junit.Test
 

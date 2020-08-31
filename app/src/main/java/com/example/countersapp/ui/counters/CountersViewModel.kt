@@ -9,6 +9,7 @@ import com.example.countersapp.R
 import com.example.countersapp.domain.CountersInteractor
 import com.example.countersapp.ui.models.Counter
 import com.example.countersapp.ui.navigation.NavigationDispatcher
+import com.example.countersapp.util.Constants.EMPTY
 import com.example.countersapp.util.applySchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -20,7 +21,7 @@ class CountersViewModel @ViewModelInject constructor(
     private val navigator: NavigationDispatcher
 ) : ViewModel() {
 
-    private var query = ""
+    private var query = EMPTY
     private val composite = CompositeDisposable()
     private val _countersStateLiveData: MutableLiveData<CountersFragmentState> = MutableLiveData()
     val countersStateLiveData: LiveData<CountersFragmentState> = _countersStateLiveData
@@ -31,7 +32,7 @@ class CountersViewModel @ViewModelInject constructor(
         composite += countersInteractor.getCounters()
             .doOnSuccess { cachedCounters = it }
             .flatMapObservable { it.toObservable() }
-            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .filter { getFilterCondition(it) }
             .toList()
             .applySchedulers()
             .subscribeBy(
@@ -46,7 +47,7 @@ class CountersViewModel @ViewModelInject constructor(
     fun searchCounter(query: String) {
         this.query = query
         composite += cachedCounters.toObservable()
-            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .filter { getFilterCondition(it) }
             .toList()
             .applySchedulers()
             .subscribeBy(
@@ -66,7 +67,7 @@ class CountersViewModel @ViewModelInject constructor(
         composite += countersInteractor.increaseCounter(counter.id)
             .doOnSuccess { cachedCounters = it }
             .flatMapObservable { it.toObservable() }
-            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .filter { getFilterCondition(it) }
             .toList()
             .applySchedulers()
             .subscribeBy(
@@ -83,7 +84,7 @@ class CountersViewModel @ViewModelInject constructor(
         composite += countersInteractor.decreaseCounter(counter.id)
             .doOnSuccess { cachedCounters = it }
             .flatMapObservable { it.toObservable() }
-            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .filter { getFilterCondition(it) }
             .toList()
             .applySchedulers()
             .subscribeBy(
@@ -102,7 +103,7 @@ class CountersViewModel @ViewModelInject constructor(
             .lastOrError()
             .doOnSuccess { cachedCounters = it }
             .flatMapObservable { it.toObservable() }
-            .filter { query.isEmpty() || it.title.startsWith(query) }
+            .filter { getFilterCondition(it) }
             .toList()
             .applySchedulers()
             .subscribeBy(
@@ -120,8 +121,10 @@ class CountersViewModel @ViewModelInject constructor(
             )
     }
 
+    private fun getFilterCondition(counter: Counter) = query.isEmpty() || counter.title.startsWith(query, true)
+
     fun clearQuery() {
-        query = ""
+        query = EMPTY
     }
 
     @VisibleForTesting

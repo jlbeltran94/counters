@@ -19,7 +19,7 @@ class NavigationDispatcherTest {
 
     @Test
     fun emit() {
-        val command: NavigationCommand = { it.navigateUp() }
+        val command: NavigationCommand = { it.popBackStack() }
         navigationDispatcher.emit(command)
         assertEquals(command, navigationDispatcher.navigationCommands.getOrAwaitValue())
     }

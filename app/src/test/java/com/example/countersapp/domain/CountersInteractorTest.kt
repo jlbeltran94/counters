@@ -3,16 +3,13 @@ package com.example.countersapp.domain
 import com.example.countersapp.data.api.CountersService
 import com.example.countersapp.data.api.models.CreateCounterRequestModel
 import com.example.countersapp.data.api.models.ModifyCounterRequestModel
-import com.example.countersapp.ui.models.CounterMapper
 import com.example.countersapp.utils.TestUtils
 import io.reactivex.rxjava3.core.Single
 import org.junit.Test
 
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner

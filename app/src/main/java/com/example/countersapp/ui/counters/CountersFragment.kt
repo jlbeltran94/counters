@@ -12,11 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
 import com.example.countersapp.R
 import com.example.countersapp.databinding.FragmentCountersBinding
-import com.example.countersapp.ui.counters.adapter.CountersAdapter
-import com.example.countersapp.ui.counters.adapter.ItemActionsListener
+import com.example.countersapp.ui.counters.adapters.CountersAdapter
+import com.example.countersapp.ui.counters.listeners.ItemActionsListener
 import com.example.countersapp.ui.models.Counter
 import com.example.countersapp.util.ButtonAction
+import com.example.countersapp.util.Constants.EMPTY
 import com.example.countersapp.util.SimpleDialogFactory
+import com.example.countersapp.util.observe
 import com.example.countersapp.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_counters.view.*
@@ -59,7 +61,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
     }
 
     private fun setupViewModel() {
-        countersViewModel.countersStateLiveData.observe(viewLifecycleOwner) {
+        observe(countersViewModel.countersStateLiveData) {
             handleState(it)
         }
     }
@@ -73,7 +75,7 @@ class CountersFragment : Fragment(), ItemActionsListener {
 
     private fun clearSearch() {
         countersViewModel.clearQuery()
-        binding.toolbar.searchBarView.setQuery("", false)
+        binding.toolbar.searchBarView.setQuery(EMPTY, false)
         binding.toolbar.searchBarView.clearFocus()
     }
 

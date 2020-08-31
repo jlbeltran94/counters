@@ -4,8 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.countersapp.domain.CountersInteractor
 import com.example.countersapp.ui.navigation.NavigationDispatcher
 import com.example.countersapp.utils.TestUtils
+import com.example.countersapp.utils.TestUtils.mAnyObject
 import com.example.countersapp.utils.TrampolineSchedulerRule
 import com.example.countersapp.utils.getOrAwaitValue
+
 import io.reactivex.rxjava3.core.Single
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -67,7 +69,7 @@ class CountersViewModelTest {
                 counters
             )
         )
-        doNothing().`when`(navigationDispatcher).emit(anyObject())
+        doNothing().`when`(navigationDispatcher).emit(mAnyObject())
         countersViewModel = CountersViewModel(countersInteractor, navigationDispatcher)
     }
 
@@ -142,11 +144,7 @@ class CountersViewModelTest {
         verify(
             navigationDispatcher,
             times(1)
-        ).emit(anyObject())
-    }
-
-    private fun <T> anyObject(): T {
-        return Mockito.any<T>()
+        ).emit(mAnyObject())
     }
 
 }

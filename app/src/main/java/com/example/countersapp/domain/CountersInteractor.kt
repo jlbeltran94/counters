@@ -4,7 +4,6 @@ import com.example.countersapp.data.api.CountersService
 import com.example.countersapp.data.api.models.CreateCounterRequestModel
 import com.example.countersapp.data.api.models.ModifyCounterRequestModel
 import com.example.countersapp.ui.models.Counter
-import com.example.countersapp.ui.models.CounterMapper
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 

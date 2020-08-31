@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.createcounters.CreateCounterFragment">
+    tools:context=".ui.createcounter.CreateCounterFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,9 +78,9 @@
         android:id="@+id/createCounterTextInputLayout"
         android:layout_width="@dimen/zero"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/small"
+        android:layout_marginStart="@dimen/big"
         android:layout_marginTop="@dimen/big"
-        android:layout_marginEnd="@dimen/small"
+        android:layout_marginEnd="@dimen/big"
         android:hint="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,5 +92,14 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textViewSeeExamples"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x_small"
+        android:text="@string/examples"
+        app:layout_constraintStart_toStartOf="@+id/createCounterTextInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/createCounterTextInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

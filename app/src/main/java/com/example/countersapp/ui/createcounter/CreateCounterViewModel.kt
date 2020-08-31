@@ -1,7 +1,10 @@
-package com.example.countersapp.ui.createcounters
+package com.example.countersapp.ui.createcounter
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.countersapp.R
 import com.example.countersapp.domain.CountersInteractor
 import com.example.countersapp.ui.navigation.NavigationDispatcher
 import com.example.countersapp.util.applySchedulers
@@ -33,16 +36,15 @@ class CreateCounterViewModel @ViewModelInject constructor(
     }
 
     fun navigateBack() {
-        navigator.emit { it.navigateUp() }
+        navigator.emit { it.popBackStack() }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
+    fun navigateToExamples() {
+        navigator.emit { it.navigate(R.id.examplesFragment) }
+    }
+
+    override fun onCleared() {
         composite.clear()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroy() {
-        composite.dispose()
+        super.onCleared()
     }
 }

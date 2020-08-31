@@ -1,4 +1,4 @@
-package com.example.countersapp.ui.counters.adapter
+package com.example.countersapp.ui.counters.adapters
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
