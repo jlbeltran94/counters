@@ -1,6 +1,6 @@
-# Cornershop Android Development Test
+# Android Development Test
 
-This is a sample app developed as part of the Cornershop selection process, for the development of this project were used:
+This is a sample app developed using:
 
 * [Kotlin](http://kotlinlang.org/)
 * [Android ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
